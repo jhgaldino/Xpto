@@ -43,8 +43,15 @@ namespace XptoAPI.src.Controllers
         [HttpPost]
         public async Task<ActionResult<MenuItem>> Create(MenuItem menuItem)
         {
-            var created = await _menuItemService.CreateAsync(menuItem);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            try
+            {
+                var created = await _menuItemService.CreateAsync(menuItem);
+                return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
@@ -53,8 +60,15 @@ namespace XptoAPI.src.Controllers
             if (id != menuItem.Id)
                 return BadRequest();
 
-            await _menuItemService.UpdateAsync(menuItem);
-            return NoContent();
+            try
+            {
+                await _menuItemService.UpdateAsync(menuItem);
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpDelete("{id}")]
