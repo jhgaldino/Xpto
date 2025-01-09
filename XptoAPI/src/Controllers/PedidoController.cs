@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using XptoAPI.src.Interfaces;
 using XptoAPI.src.Models;
+using ErrorOr; // Adicionado
+using XptoAPI.src.Common.Errors; // Adicionado
 
 namespace XptoAPI.src.Controllers
 {
@@ -22,18 +24,39 @@ namespace XptoAPI.src.Controllers
             return Ok(pedidos);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Pedido>> GetById(int id)
+        {
+            var result = await _pedidoService.GetByIdAsync(id);
+
+            return result.Match(
+                pedido => Ok(pedido),
+                errors => NotFound(new { errors = errors.Select(e => e.Description) })
+            );
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Pedido>> CreatePedido(Pedido pedido)
+        {
+            var result = await _pedidoService.CreatePedidoAsync(pedido);
+
+            return result.Match(
+                pedido => CreatedAtAction(nameof(GetById), new { id = pedido.Id }, pedido),
+                errors => BadRequest(new { errors = errors.Select(e => e.Description) }));
+        }
+
         [HttpPut("{id}/status")]
         public async Task<IActionResult> UpdateStatus(int id, StatusPedido status)
         {
-            try
-            {
-                await _pedidoService.UpdateStatusAsync(id, status);
-                return NoContent();
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            var result = await _pedidoService.UpdateStatusAsync(id, status);
+
+            return result.Match(
+                _ => NoContent(),
+                errors => errors.First().Type switch
+                {
+                    ErrorType.NotFound => NotFound(errors),
+                    _ => BadRequest(new { errors = errors.Select(e => e.Description) })
+                });
         }
     }
 }

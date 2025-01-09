@@ -2,7 +2,7 @@ using XptoAPI.src.Models;
 
 namespace XptoAPI.src.DTOs
 {
-       public class MenuItemDTO
+    public class MenuItemDTO
     {
         public int Id { get; set; }
         public string Nome { get; set; } = string.Empty;

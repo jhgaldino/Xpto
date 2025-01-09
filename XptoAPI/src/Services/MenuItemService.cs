@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using XptoAPI.src.Common.Validators;
 using XptoAPI.src.Data;
 using XptoAPI.src.Interfaces;
 using XptoAPI.src.Models;
@@ -9,27 +10,10 @@ namespace XptoAPI.src.Services
     {
         private readonly XptoContext _context;
 
-        // Configure horários permitidos para cada tipo de refeição
-        private static readonly TimeSpan CafeDaManhaInicio = new(6, 0, 0);
-        private static readonly TimeSpan CafeDaManhaFim = new(10, 30, 0);
-        private static readonly TimeSpan AlmocoInicio = new(11, 30, 0);
-        private static readonly TimeSpan AlmocoFim = new(14, 30, 0);
 
         public MenuItemService(XptoContext context)
         {
             _context = context;
-        }
-
-        private bool HorarioPermitido(TipoRefeicao tipoRefeicao)
-        {
-            var horaAtual = DateTime.Now.TimeOfDay;
-
-            return tipoRefeicao switch
-            {
-                TipoRefeicao.CafedaManha => horaAtual >= CafeDaManhaInicio && horaAtual <= CafeDaManhaFim,
-                TipoRefeicao.Almoco => horaAtual >= AlmocoInicio && horaAtual <= AlmocoFim,
-                _ => false
-            };
         }
 
         public async Task<IEnumerable<MenuItem>> GetAllAsync()
@@ -51,7 +35,7 @@ namespace XptoAPI.src.Services
 
         public async Task<MenuItem> CreateAsync(MenuItem menuItem)
         {
-            if (!HorarioPermitido(menuItem.TipoRefeicao))
+            if (!DataHoraValidator.IsHorarioPermitido(menuItem.TipoRefeicao))
             {
                 throw new InvalidOperationException($"Não é possível criar itens do tipo {menuItem.TipoRefeicao} fora do horário permitido.");
             }
@@ -63,7 +47,7 @@ namespace XptoAPI.src.Services
 
         public async Task UpdateAsync(MenuItem menuItem)
         {
-            if (!HorarioPermitido(menuItem.TipoRefeicao))
+            if (!DataHoraValidator.IsHorarioPermitido(menuItem.TipoRefeicao))
             {
                 throw new InvalidOperationException($"Não é possível atualizar itens do tipo {menuItem.TipoRefeicao} fora do horário permitido.");
             }
