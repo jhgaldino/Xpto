@@ -29,7 +29,7 @@ namespace XptoAPI.src.Controllers
         {
             var result = await _pedidoService.GetByIdAsync(id);
 
-            return result.Match(
+            return result.Match<ActionResult<Pedido>>(
                 pedido => Ok(pedido),
                 errors => NotFound(new { errors = errors.Select(e => e.Description) })
             );
@@ -40,7 +40,7 @@ namespace XptoAPI.src.Controllers
         {
             var result = await _pedidoService.CreatePedidoAsync(pedido);
 
-            return result.Match(
+            return result.Match<ActionResult<Pedido>>(
                 pedido => CreatedAtAction(nameof(GetById), new { id = pedido.Id }, pedido),
                 errors => BadRequest(new { errors = errors.Select(e => e.Description) }));
         }
@@ -50,9 +50,9 @@ namespace XptoAPI.src.Controllers
         {
             var result = await _pedidoService.UpdateStatusAsync(id, status);
 
-            return result.Match(
+            return result.Match<IActionResult>(
                 _ => NoContent(),
-                errors => errors.First().Type switch
+                onError: errors => errors[0].Type switch
                 {
                     ErrorType.NotFound => NotFound(errors),
                     _ => BadRequest(new { errors = errors.Select(e => e.Description) })
