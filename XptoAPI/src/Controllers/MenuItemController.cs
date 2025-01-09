@@ -5,17 +5,30 @@ using XptoAPI.src.Services;
 
 namespace XptoAPI.src.Controllers
 {
+    /// <summary>
+    /// Controlador para gerenciar itens do menu.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class MenuItemController : ControllerBase
     {
         private readonly IMenuItemService _menuItemService;
 
+        /// <summary>
+        /// Inicializa uma nova instância do controlador de itens do menu.
+        /// </summary>
+        /// <param name="menuItemService">Serviço para interação com os itens do menu.</param>
         public MenuItemController(IMenuItemService menuItemService)
         {
             _menuItemService = menuItemService;
         }
 
+        /// <summary>
+        /// Retorna a lista completa de itens do menu.
+        /// </summary>
+        /// <remarks>Exemplo de requisição: GET /api/MenuItem</remarks>
+        /// <response code="200">Retorna a lista de itens do menu</response>
+        /// <response code="500">Erro interno</response>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MenuItem>>> GetAll()
         {
@@ -23,23 +36,46 @@ namespace XptoAPI.src.Controllers
             return Ok(items);
         }
 
+        /// <summary>
+        /// Retorna um item de menu pelo seu identificador.
+        /// </summary>
+        /// <param name="id">Identificador do item de menu.</param>
+        /// <response code="200">Retorna o item de menu encontrado</response>
+        /// <response code="404">Item não encontrado</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<MenuItem>> GetById(int id)
         {
             var item = await _menuItemService.GetByIdAsync(id);
             if (item == null)
+            {
                 return NotFound();
-                
+            }
             return Ok(item);
         }
 
+        /// <summary>
+        /// Retorna itens de menu filtrados por tipo de refeição.
+        /// </summary>
+        /// <param name="tipo">Tipo de refeição (ex: CafedaManha, Almoco, Jantar).</param>
+        /// <response code="200">Retorna a lista de itens do tipo especificado</response>
+        /// <response code="404">Caso não encontre nenhum item do tipo informado</response>
         [HttpGet("tiporefeicao/{tipo}")]
         public async Task<ActionResult<IEnumerable<MenuItem>>> GetByTipoRefeicao(TipoRefeicao tipo)
         {
             var items = await _menuItemService.GetByTipoRefeicaoAsync(tipo);
+            if (!items.Any())
+            {
+                return NotFound();
+            }
             return Ok(items);
         }
 
+        /// <summary>
+        /// Cria um novo item de menu.
+        /// </summary>
+        /// <param name="menuItem">Objeto contendo as informações do item de menu.</param>
+        /// <response code="201">Retorna o item de menu criado</response>
+        /// <response code="400">Erro de validação ou horário não permitido</response>
         [HttpPost]
         public async Task<ActionResult<MenuItem>> Create(MenuItem menuItem)
         {
@@ -54,11 +90,20 @@ namespace XptoAPI.src.Controllers
             }
         }
 
+        /// <summary>
+        /// Atualiza um item de menu existente.
+        /// </summary>
+        /// <param name="id">Identificador do item de menu.</param>
+        /// <param name="menuItem">Objeto contendo os novos dados de item de menu.</param>
+        /// <response code="204">Confirma atualização sem retornar conteúdo</response>
+        /// <response code="400">Erro de validação ou horário não permitido</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, MenuItem menuItem)
         {
             if (id != menuItem.Id)
+            {
                 return BadRequest();
+            }
 
             try
             {
@@ -71,6 +116,12 @@ namespace XptoAPI.src.Controllers
             }
         }
 
+        /// <summary>
+        /// Exclui um item de menu pelo seu identificador.
+        /// </summary>
+        /// <param name="id">Identificador do item de menu.</param>
+        /// <response code="204">Confirma exclusão do item de menu</response>
+        /// <response code="404">Item não encontrado</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

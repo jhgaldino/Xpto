@@ -4,20 +4,27 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationFile>bin\Debug\net8.0\XptoAPI.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ErrorOr" Version="1.9.0" />
     <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
+    <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="xunit" Version="2.9.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="src\DTOs\" />
     <Folder Include="src\Migrations\" />
     <Folder Include="src\Validators\" />
-    <Folder Include="tests\UnitTests\" />
   </ItemGroup>
 
 </Project>

@@ -22,11 +22,33 @@ namespace XptoAPI.src.Services
 
         public async Task<IEnumerable<Pedido>> GetPedidosCozinhaAsync()
         {
-            return await _context.Pedidos!
+            var pedidosNaoFinalizados = await _context.Pedidos!
                 .Where(p => p.Status == StatusPedido.Recebido || p.Status == StatusPedido.EmPreparacao)
-                .OrderBy(p => p.DataHoraPedido)  // Ordenação por hora do pedido
+                .OrderBy(p => p.DataHoraPedido)
                 .Include(p => p.Itens)
                 .ToListAsync();
+
+            // Ordena os itens de cada pedido conforme a regra de negócio
+            foreach (var pedido in pedidosNaoFinalizados)
+            {
+                pedido.Itens = pedido.Itens
+                    .OrderBy(item => GetOrdemTipoItem(item.Tipo))
+                    .ToList();
+            }
+
+            return pedidosNaoFinalizados;
+        }
+
+        private static int GetOrdemTipoItem(TipodeItemMenu tipo)
+        {
+            return tipo switch
+            {
+                TipodeItemMenu.Bebida => 1,
+                TipodeItemMenu.Acompanhamento => 2,
+                TipodeItemMenu.PratoPrincipal => 3,
+                TipodeItemMenu.Sobremesa => 4,
+                _ => 99
+            };
         }
 
         public async Task<ErrorOr<Pedido>> CreatePedidoAsync(Pedido pedido)
@@ -49,7 +71,7 @@ namespace XptoAPI.src.Services
             return pedido;
         }
 
-        public async Task<ErrorOr<Updated>> UpdateStatusAsync(int id, StatusPedido novoStatus)
+        public async Task<ErrorOr<Updated>> UpdateStatusAsync(int id, StatusPedido status)
         {
             var pedido = await _context.Pedidos!.FindAsync(id);
             
@@ -58,12 +80,12 @@ namespace XptoAPI.src.Services
                 return await Task.FromResult<ErrorOr<Updated>>(Errors.Pedido.PedidoNaoEncontrado);
             }
 
-            if (!IsValidStatusTransition(pedido.Status, novoStatus))
+            if (!IsValidStatusTransition(pedido.Status, status))
             {
                 return await Task.FromResult<ErrorOr<Updated>>(Errors.Pedido.TransicaoStatusInvalida);
             }
 
-            pedido.Status = novoStatus;
+            pedido.Status = status;
             await _context.SaveChangesAsync();
             return await Task.FromResult<ErrorOr<Updated>>(Result.Updated);
         }

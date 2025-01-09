@@ -1,0 +1,66 @@
+{
+  "info": {
+    "name": "XptoAPI - Pedido Controller",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET Pedidos Cozinha",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/Pedido/cozinha",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","Pedido","cozinha"]
+        }
+      }
+    },
+    {
+      "name": "GET Pedido by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/Pedido/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","Pedido","1"]
+        }
+      }
+    },
+    {
+      "name": "POST Create Pedido",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type","value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuarioId\": \"user123\",\n  \"dataHoraPedido\": \"2023-12-01T12:00:00\",\n  \"tipoRefeicao\": 1,\n  \"status\": 0,\n  \"itens\": [\n    {\n      \"id\": 1,\n      \"nome\": \"Prato Exemplo\",\n      \"tipo\": 2,\n      \"tipoRefeicao\": 1\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Pedido",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","Pedido"]
+        }
+      }
+    },
+    {
+      "name": "PUT Update Pedido Status",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/Pedido/1/status?status=1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","Pedido","1","status"],
+          "query": [
+            {
+              "key": "status",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
