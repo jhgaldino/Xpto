@@ -33,3 +33,70 @@ dotnet ef database update
 ```
 dotnet run
 ```
+
+A API estará disponível em:
+
+HTTP: http://localhost:5081
+
+HTTPS: https://localhost:7211
+
+Swagger UI: http://localhost:5081/swagger
+
+## Configuração do Frontend (XptoFrontend)
+
+1. Instale as dependências:
+```
+cd ../XptoFrontend
+npm install
+```
+
+2. Execute o frontend:
+```
+ng serve
+```
+
+O frontend estará disponível em http://localhost:4200
+
+### Horários de Funcionamento
+
+Café da Manhã: 06:00 às 10:30
+
+Almoço: 11:30 às 14:30
+
+OBS : Ao fazer pedido na tela, o sistema está usando o horário real do sistema tanto no frontend quanto no backend. Caso esteja fora do horario dos pedidos, ajuste o horário do seu sistema.
+
+## Documentação da API
+
+A documentação completa da API está disponível via Swagger UI em http://localhost:5081/swagger
+
+### Coleção do Postman
+
+Para testes da API, uma coleção do Postman está disponível em XptoAPI-Pedido.postman_collection.json
+
+## Estrutura do Projeto
+### Backend (XptoAPI)
+src/Controllers/: Controladores da API
+
+src/Models/: Modelos de dados
+
+src/Services/: Lógica de negócios
+src/Validators/: Validações
+
+src/Data/: Contexto do banco de dados
+
+### Frontend (XptoFrontend)
+
+src/app/components/: Componentes Angular
+
+src/app/services/: Serviços
+
+src/app/models/: Interfaces e tipos
+
+# Testes
+
+Para executar os testes do backend:
+
+```
+cd XptoAPI.Tests
+dotnet test
+```
