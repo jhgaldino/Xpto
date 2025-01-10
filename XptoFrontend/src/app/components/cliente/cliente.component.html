@@ -1,0 +1,36 @@
+<!-- src/app/components/cliente/cliente.component.html -->
+<div class="cliente-container">
+  <div class="tipo-refeicao">
+    <button [class.active]="tipoRefeicao === 0" (click)="changeTipoRefeicao(0)">
+      Café da Manhã
+    </button>
+    <button [class.active]="tipoRefeicao === 1" (click)="changeTipoRefeicao(1)">
+      Almoço
+    </button>
+  </div>
+
+  <div class="menu-items">
+    <h2>Cardápio</h2>
+    <div class="items-grid">
+      <div *ngFor="let item of menuItems" 
+           class="menu-item"
+           [class.selected]="selectedItems.includes(item)"
+           (click)="toggleItemSelection(item)">
+        <h3>{{item.nome}}</h3>
+        <p>{{getTipoLabel(item.tipo)}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="selected-items" *ngIf="selectedItems.length > 0">
+    <h3>Itens Selecionados</h3>
+    <ul>
+      <li *ngFor="let item of selectedItems">
+        {{item.nome}}
+      </li>
+    </ul>
+    <button (click)="createPedido()" class="create-pedido">
+      Fazer Pedido
+    </button>
+  </div>
+</div>

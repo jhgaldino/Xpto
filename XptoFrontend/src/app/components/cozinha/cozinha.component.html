@@ -1,0 +1,39 @@
+<div class="cozinha-container">
+  <h2>Pedidos Ativos</h2>
+  
+  <div class="pedidos-grid">
+    <div *ngFor="let pedido of pedidos" class="pedido-card">
+      <div class="pedido-header">
+        <h3>Pedido #{{pedido.id}}</h3>
+        <span class="status" [class]="getStatusLabel(pedido.status).toLowerCase()">
+          {{getStatusLabel(pedido.status)}}
+        </span>
+      </div>
+
+      <div class="pedido-info">
+        <p>Horário: {{pedido.dataHoraPedido | date:'HH:mm'}}</p>
+        <p>Tipo: {{pedido.tipoRefeicao === 0 ? 'Café da Manhã' : 'Almoço'}}</p>
+      </div>
+
+      <div class="pedido-items">
+        <h4>Itens:</h4>
+        <ul>
+          <li *ngFor="let item of pedido.itens">
+            {{item.nome}}
+          </li>
+        </ul>
+      </div>
+
+      <div class="pedido-actions" *ngIf="!pedido.pedidoCompleto">
+        <button *ngIf="pedido.status === StatusPedido.Recebido"
+                (click)="updateStatus(pedido, StatusPedido.EmPreparacao)">
+          Iniciar Preparo
+        </button>
+        <button *ngIf="pedido.status === StatusPedido.EmPreparacao"
+                (click)="updateStatus(pedido, StatusPedido.Pronto)">
+          Marcar como Pronto
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

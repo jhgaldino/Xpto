@@ -1,0 +1,43 @@
+$header-bg: #333;
+$header-text: #fff;
+$nav-spacing: 1rem;
+
+header {
+  background-color: $header-bg;
+  padding: $nav-spacing;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+  nav {
+    ul {
+      list-style: none;
+      display: flex;
+      gap: $nav-spacing;
+      margin: 0;
+      padding: 0;
+
+      li {
+        a {
+          color: $header-text;
+          text-decoration: none;
+          padding: 0.5rem 1rem;
+          border-radius: 4px;
+          transition: background-color 0.3s ease;
+
+          &:hover {
+            background-color: lighten($header-bg, 10%);
+          }
+
+          &.active {
+            background-color: lighten($header-bg, 20%);
+          }
+        }
+      }
+    }
+  }
+}
+
+main {
+  padding: $nav-spacing;
+  max-width: 1200px;
+  margin: 0 auto;
+}
