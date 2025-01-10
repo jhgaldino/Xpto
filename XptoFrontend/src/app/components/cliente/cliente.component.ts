@@ -51,7 +51,33 @@ export class ClienteComponent implements OnInit {
   }
 
   getTipoLabel(tipo: TipodeItemMenu): string {
-    return TipodeItemMenu[tipo];
+    switch (tipo) {
+      case TipodeItemMenu.Bebida:
+        return "Bebida";
+      case TipodeItemMenu.Acompanhamento:
+        return "Acompanhamento";
+      case TipodeItemMenu.PratoPrincipal:
+        return "Prato Principal";
+      case TipodeItemMenu.Sobremesa:
+        return "Sobremesa";
+      default:
+        return "Desconhecido";
+    }
+  }
+
+  private isHorarioPermitido(tipoRefeicao: TipoRefeicao): boolean {
+    const hora = new Date().getHours();
+    const minutos = new Date().getMinutes();
+    const horaAtual = hora + (minutos / 60);
+
+    switch (tipoRefeicao) {
+      case TipoRefeicao.CafedaManha:
+        return horaAtual >= 6 && horaAtual <= 10.5; // 6:00 às 10:30
+      case TipoRefeicao.Almoco:
+        return horaAtual >= 11.5 && horaAtual <= 14.5; // 11:30 às 14:30
+      default:
+        return false;
+    }
   }
 
   createPedido(): void {
@@ -60,10 +86,25 @@ export class ClienteComponent implements OnInit {
       return;
     }
 
+    if (!this.isHorarioPermitido(this.tipoRefeicao)) {
+      alert('Horário não permitido para este tipo de refeição');
+      return;
+    }
+
+    const agora = new Date();
+    const dataHoraPedido = new Date(
+      agora.getFullYear(),
+      agora.getMonth(),
+      agora.getDate(),
+      agora.getHours(),
+      agora.getMinutes(),
+      agora.getSeconds()
+    );
+
     const pedido: Pedido = {
       id: 0,
       usuarioId: 'user123',
-      dataHoraPedido: new Date(),
+      dataHoraPedido: dataHoraPedido,
       tipoRefeicao: this.tipoRefeicao,
       status: StatusPedido.Recebido,
       pedidoCompleto: false,
@@ -76,7 +117,11 @@ export class ClienteComponent implements OnInit {
           alert('Pedido criado com sucesso!');
           this.selectedItems = [];
         },
-        error: (error) => alert('Erro ao criar pedido: ' + error.error?.errors?.[0] || 'Erro desconhecido')
+        error: (error) => {
+          const mensagemErro = error.error?.errors?.[0] || 'Erro desconhecido';
+          alert('Erro ao criar pedido: ' + mensagemErro);
+          console.error('Erro detalhado:', error);
+        }
       });
   }
 }
