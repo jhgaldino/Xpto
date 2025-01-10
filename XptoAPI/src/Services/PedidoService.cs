@@ -54,17 +54,26 @@ namespace XptoAPI.src.Services
         public async Task<ErrorOr<Pedido>> CreatePedidoAsync(Pedido pedido)
         {
             var validationResult = await _validator.ValidateAsync(pedido);
-            
+
             if (!validationResult.IsValid)
             {
-                return Error.Validation("Pedido.ValidationError", 
+                return Error.Validation("Pedido.ValidationError",
                     string.Join(", ", validationResult.Errors.Select(x => x.ErrorMessage)));
             }
 
-            if (!DataHoraValidator.IsHorarioPermitido(pedido.TipoRefeicao))
+            if (!DataHoraValidator.IsHorarioPermitido(pedido.TipoRefeicao, pedido.DataHoraPedido))
             {
                 return Errors.Pedido.HorarioNaoPermitido;
             }
+
+            // Buscar os itens existentes do banco
+            var itemIds = pedido.Itens.Select(i => i.Id).ToList();
+            var itensExistentes = await _context.MenuItems!
+                .Where(m => itemIds.Contains(m.Id))
+                .ToListAsync();
+
+            // Substituir os itens do pedido pelos existentes
+            pedido.Itens = itensExistentes;
 
             _context.Pedidos!.Add(pedido);
             await _context.SaveChangesAsync();
@@ -74,7 +83,7 @@ namespace XptoAPI.src.Services
         public async Task<ErrorOr<Updated>> UpdateStatusAsync(int id, StatusPedido status)
         {
             var pedido = await _context.Pedidos!.FindAsync(id);
-            
+
             if (pedido is null)
             {
                 return await Task.FromResult<ErrorOr<Updated>>(Errors.Pedido.PedidoNaoEncontrado);
@@ -91,14 +100,14 @@ namespace XptoAPI.src.Services
         }
 
         public async Task<ErrorOr<Pedido>> GetByIdAsync(int id)
-    {
-        var pedido = await _context.Pedidos!.FindAsync(id);
-        if (pedido is null)
         {
-            return Error.NotFound("Pedido.NotFound", "Pedido não encontrado");
+            var pedido = await _context.Pedidos!.FindAsync(id);
+            if (pedido is null)
+            {
+                return Error.NotFound("Pedido.NotFound", "Pedido não encontrado");
+            }
+            return pedido;
         }
-        return pedido;
-    }
 
         private static bool IsValidStatusTransition(StatusPedido statusAtual, StatusPedido novoStatus)
         {

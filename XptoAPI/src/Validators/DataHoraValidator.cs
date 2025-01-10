@@ -9,14 +9,19 @@ namespace XptoAPI.src.Common.Validators
         private static readonly TimeSpan AlmocoInicio = new(11, 30, 0);
         private static readonly TimeSpan AlmocoFim = new(14, 30, 0);
 
-        public static bool IsHorarioPermitido(TipoRefeicao tipoRefeicao)
+        /// <summary>
+        /// Verifica se o horário atual está dentro do horário permitido para a refeição.
+        /// </summary>
+        /// <param name="tipoRefeicao">Tipo de refeicao.</param>
+        /// <returns>Retorna true se o horário atual está dentro do horário permitido para a refeição, caso contrario false.</returns>
+        public static bool IsHorarioPermitido(TipoRefeicao tipoRefeicao, DateTime dataHora)
         {
-            var horaAtual = DateTime.Now.TimeOfDay;
+            var hora = dataHora.TimeOfDay;
 
             return tipoRefeicao switch
             {
-                TipoRefeicao.CafedaManha => horaAtual >= CafeDaManhaInicio && horaAtual <= CafeDaManhaFim,
-                TipoRefeicao.Almoco => horaAtual >= AlmocoInicio && horaAtual <= AlmocoFim,
+                TipoRefeicao.CafedaManha => hora >= CafeDaManhaInicio && hora <= CafeDaManhaFim,
+                TipoRefeicao.Almoco => hora >= AlmocoInicio && hora <= AlmocoFim,
                 _ => false
             };
         }

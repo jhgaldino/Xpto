@@ -17,7 +17,14 @@ namespace XptoAPI.src.Common.Errors
             public static Error TransicaoStatusInvalida => Error.Validation(
                 code: "Pedido.TransicaoStatusInvalida",
                 description: "Transição de status inválida para o pedido");
-        }
 
+            public class None
+            {
+                public static readonly Error NotFound = Error.NotFound(
+                    code: "Pedido.NaoEncontrado",
+                    description: "Nenhum Pedido Encontrado para a Cozinha");
+            }
+
+        }
     }
 }

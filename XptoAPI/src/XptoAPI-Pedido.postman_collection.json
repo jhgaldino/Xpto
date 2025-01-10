@@ -10,8 +10,8 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/Pedido/cozinha",
-          "host": ["{{baseUrl}}"],
+          "raw": "http://localhost:5081/api/Pedido/cozinha",
+          "host": ["http://localhost:5081"],
           "path": ["api","Pedido","cozinha"]
         }
       }
@@ -22,8 +22,8 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/Pedido/1",
-          "host": ["{{baseUrl}}"],
+          "raw": "http://localhost:5081/api/Pedido/1",
+          "host": ["http://localhost:5081"],
           "path": ["api","Pedido","1"]
         }
       }
@@ -38,8 +38,8 @@
           "raw": "{\n  \"usuarioId\": \"user123\",\n  \"dataHoraPedido\": \"2023-12-01T12:00:00\",\n  \"tipoRefeicao\": 1,\n  \"status\": 0,\n  \"itens\": [\n    {\n      \"id\": 1,\n      \"nome\": \"Prato Exemplo\",\n      \"tipo\": 2,\n      \"tipoRefeicao\": 1\n    }\n  ]\n}"
         },
         "url": {
-          "raw": "{{baseUrl}}/api/Pedido",
-          "host": ["{{baseUrl}}"],
+          "raw": "http://localhost:5081/api/Pedido",
+          "host": ["http://localhost:5081"],
           "path": ["api","Pedido"]
         }
       }
@@ -50,8 +50,8 @@
         "method": "PUT",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/Pedido/1/status?status=1",
-          "host": ["{{baseUrl}}"],
+          "raw": "http://localhost:5081/api/Pedido/1/status?status=1",
+          "host": ["http://localhost:5081"],
           "path": ["api","Pedido","1","status"],
           "query": [
             {

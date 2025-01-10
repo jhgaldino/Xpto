@@ -35,7 +35,7 @@ namespace XptoAPI.src.Services
 
         public async Task<MenuItem> CreateAsync(MenuItem menuItem)
         {
-            if (!DataHoraValidator.IsHorarioPermitido(menuItem.TipoRefeicao))
+            if (!DataHoraValidator.IsHorarioPermitido(menuItem.TipoRefeicao, DateTime.Now))
             {
                 throw new InvalidOperationException($"Não é possível criar itens do tipo {menuItem.TipoRefeicao} fora do horário permitido.");
             }
@@ -47,7 +47,7 @@ namespace XptoAPI.src.Services
 
         public async Task UpdateAsync(MenuItem menuItem)
         {
-            if (!DataHoraValidator.IsHorarioPermitido(menuItem.TipoRefeicao))
+            if (!DataHoraValidator.IsHorarioPermitido(menuItem.TipoRefeicao, DateTime.Now))
             {
                 throw new InvalidOperationException($"Não é possível atualizar itens do tipo {menuItem.TipoRefeicao} fora do horário permitido.");
             }
