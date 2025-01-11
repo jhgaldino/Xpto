@@ -9,11 +9,24 @@
   }
 
   .pedido-card {
+   .pedido-card {
+    width: 100%;
     padding: 1rem;
     border: 1px solid #ddd;
     border-radius: 4px;
     background-color: white;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+    @media (max-width: 600px) {
+      padding: 0.75rem;
+    }
+
+    @media (max-width: 600px) {
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.2rem; }
+    .status { font-size: 0.8rem; }
+    button { padding: 0.4rem 0.8rem; }
+  }
 
     .pedido-header {
       display: flex;
@@ -60,4 +73,5 @@
       }
     }
   }
+}
 }

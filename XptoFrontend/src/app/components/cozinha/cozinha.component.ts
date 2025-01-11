@@ -40,7 +40,7 @@ export class CozinhaComponent implements OnInit {
         next: () => {
           pedido.status = newStatus;
           if (newStatus === StatusPedido.Pronto) {
-            // Remove the order from the display list when marked as ready
+            // Remove o pedido da lista quando marcado como pronto
             this.pedidos = this.pedidos.filter(p => p.id !== pedido.id);
           }
         },

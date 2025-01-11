@@ -3,6 +3,7 @@
   
   <div class="pedidos-grid">
     <div *ngFor="let pedido of pedidos" class="pedido-card">
+      <!-- Só mostra o card se o status for Recebido ou EmPreparacao -->
       <div *ngIf="pedido.status === StatusPedido.Recebido || 
                   pedido.status === StatusPedido.EmPreparacao">
         <div class="pedido-header">
@@ -26,7 +27,7 @@
           </ul>
         </div>
 
-        <div class="pedido-actions" *ngIf="!pedido.pedidoCompleto">
+        <div class="pedido-actions">
           <button *ngIf="pedido.status === StatusPedido.Recebido"
                   (click)="updateStatus(pedido, StatusPedido.EmPreparacao)">
             Iniciar Preparo
