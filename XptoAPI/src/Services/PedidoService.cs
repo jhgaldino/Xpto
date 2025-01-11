@@ -23,7 +23,9 @@ namespace XptoAPI.src.Services
         public async Task<IEnumerable<Pedido>> GetPedidosCozinhaAsync()
         {
             var pedidosNaoFinalizados = await _context.Pedidos!
-                .Where(p => p.Status == StatusPedido.Recebido || p.Status == StatusPedido.EmPreparacao)
+                .Where(p => p.Status == StatusPedido.Recebido ||
+                            p.Status == StatusPedido.EmPreparacao ||
+                            p.Status == StatusPedido.Pronto)
                 .OrderBy(p => p.DataHoraPedido)
                 .Include(p => p.Itens)
                 .ToListAsync();
@@ -107,6 +109,19 @@ namespace XptoAPI.src.Services
                 return Error.NotFound("Pedido.NotFound", "Pedido não encontrado");
             }
             return pedido;
+        }
+
+        public async Task<ErrorOr<Updated>> DeleteAsync(int id)
+        {
+            var pedido = await _context.Pedidos!.FindAsync(id);
+            if (pedido is null)
+            {
+                return await Task.FromResult<ErrorOr<Updated>>(Errors.Pedido.PedidoNaoEncontrado);
+            }
+
+            _context.Pedidos!.Remove(pedido);
+            await _context.SaveChangesAsync();
+            return await Task.FromResult<ErrorOr<Updated>>(Result.Updated);
         }
 
         private static bool IsValidStatusTransition(StatusPedido statusAtual, StatusPedido novoStatus)

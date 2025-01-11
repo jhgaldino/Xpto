@@ -92,5 +92,28 @@ namespace XptoAPI.src.Controllers
                     _ => BadRequest(new { errors = errors.Select(e => e.Description) })
                 });
         }
+
+        /// <summary>
+        /// Exclui um pedido pelo seu identificador.
+        /// </summary>
+        /// <param name="id">Identificador do pedido a ser excluído.</param>
+        /// <response code="204">Pedido excluído com sucesso</response>
+        /// <response code="400">Erro de validação</response>
+        /// <response code="404">Pedido não encontrado</response>
+        /// <response code="500">Erro interno do servidor</response>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _pedidoService.DeleteAsync(id);
+
+            return result.Match<IActionResult>(
+                _ => NoContent(),
+                onError: errors => errors[0].Type switch
+                {
+                    ErrorType.NotFound => NotFound(errors),
+                    _ => BadRequest(new { errors = errors.Select(e => e.Description) })
+                });
+        }
+
     }
 }

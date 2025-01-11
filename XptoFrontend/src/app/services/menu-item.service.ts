@@ -13,7 +13,7 @@ export class MenuItemService {
   constructor(private http: HttpClient) { }
 
   getByTipoRefeicao(tipo: TipoRefeicao): Observable<MenuItem[]> {
-    console.log('Requesting items for tipo:', tipo); // Debug
+    console.log('Requesting items for tipo:', tipo);
     return this.http.get<MenuItem[]>(`${this.apiUrl}/tiporefeicao/${tipo}`);
   }
 }

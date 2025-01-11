@@ -46,7 +46,7 @@ export class CozinhaComponent implements OnInit {
         error: (error) => alert('Erro ao atualizar status: ' + error.error?.errors?.[0] || 'Erro desconhecido')
       });
   }
-
+// Edita o status do pedido, evitando palavras juntas
   getStatusLabel(status: StatusPedido): string {
     switch (status) {
       case StatusPedido.Recebido:
@@ -63,7 +63,7 @@ export class CozinhaComponent implements OnInit {
         return "Desconhecido";
     }
   }
-
+  // Formata a data para exibir no formato HH:mm de Brasília
   formatDate(date: string | Date): string {
     const tzDate = typeof date === 'string' 
       ? new TZDate(parseISO(date), 'America/Sao_Paulo')

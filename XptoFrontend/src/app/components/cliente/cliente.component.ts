@@ -38,7 +38,7 @@ export class ClienteComponent implements OnInit {
   ngOnInit(): void {
     this.loadMenuItems();
   }
-
+// Carrega os itens do menu
   loadMenuItems(): void {
     this.menuItemService.getByTipoRefeicao(this.tipoRefeicao)
         .subscribe({
@@ -52,7 +52,7 @@ export class ClienteComponent implements OnInit {
             }
         });
   }
-
+// Muda o tipo de refeição
   changeTipoRefeicao(tipo: TipoRefeicao): void {
     this.tipoRefeicao = tipo;
     this.selectedItems = [];
@@ -67,7 +67,6 @@ export class ClienteComponent implements OnInit {
       this.selectedItems.splice(index, 1);
     }
   }
-
   getTipoLabel(tipo: TipodeItemMenu): string {
     switch (tipo) {
       case TipodeItemMenu.Bebida:
@@ -82,7 +81,7 @@ export class ClienteComponent implements OnInit {
         return "Desconhecido";
     }
   }
-
+// Verifica o horário permitido para a refeição
   private isHorarioPermitido(tipoRefeicao: TipoRefeicao): boolean {
     const hora = new Date().getHours();
     const minutos = new Date().getMinutes();
@@ -109,7 +108,7 @@ export class ClienteComponent implements OnInit {
       return;
     }
 
-    // Create date in Brasília timezone
+    // Criar data e hora do pedido
     const dataHoraPedido = new TZDate(new Date(), 'America/Sao_Paulo');
 
     const pedido: Pedido = {
