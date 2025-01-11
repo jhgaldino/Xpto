@@ -3,7 +3,8 @@
   
   <div class="pedidos-grid">
     <div *ngFor="let pedido of pedidos" class="pedido-card">
-      <div *ngIf="pedido.status !== StatusPedido.Entregue && pedido.status !== StatusPedido.Cancelado">
+      <div *ngIf="pedido.status === StatusPedido.Recebido || 
+                  pedido.status === StatusPedido.EmPreparacao">
         <div class="pedido-header">
           <h3>Pedido #{{pedido.id}}</h3>
           <span class="status" [class]="getStatusLabel(pedido.status).toLowerCase().replace(' ', '-')">

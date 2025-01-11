@@ -97,6 +97,12 @@ namespace XptoAPI.src.Services
             }
 
             pedido.Status = status;
+            // Atualiza pedidoCompleto quando o status é Pronto
+            if (status == StatusPedido.Pronto)
+            {
+                pedido.PedidoCompleto = true;
+            }
+
             await _context.SaveChangesAsync();
             return await Task.FromResult<ErrorOr<Updated>>(Result.Updated);
         }

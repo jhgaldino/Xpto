@@ -35,6 +35,12 @@ namespace XptoAPI.src.Controllers
         public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidosCozinha()
         {
             var pedidos = await _pedidoService.GetPedidosCozinhaAsync();
+
+            if (!pedidos.Any())
+            {
+                return NotFound(new { message = "Nenhum Pedido Encontrado para a Cozinha" });
+            }
+
             return Ok(pedidos);
         }
 
@@ -107,10 +113,10 @@ namespace XptoAPI.src.Controllers
             var result = await _pedidoService.DeleteAsync(id);
 
             return result.Match<IActionResult>(
-                _ => NoContent(),
+                _ => Ok(new { message = "Pedido excluído com sucesso" }), // Mudamos de NoContent para Ok com mensagem
                 onError: errors => errors[0].Type switch
                 {
-                    ErrorType.NotFound => NotFound(errors),
+                    ErrorType.NotFound => NotFound(new { errors = errors.Select(e => e.Description) }),
                     _ => BadRequest(new { errors = errors.Select(e => e.Description) })
                 });
         }

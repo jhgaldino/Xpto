@@ -40,7 +40,8 @@ export class CozinhaComponent implements OnInit {
         next: () => {
           pedido.status = newStatus;
           if (newStatus === StatusPedido.Pronto) {
-            pedido.pedidoCompleto = true;
+            // Remove the order from the display list when marked as ready
+            this.pedidos = this.pedidos.filter(p => p.id !== pedido.id);
           }
         },
         error: (error) => alert('Erro ao atualizar status: ' + error.error?.errors?.[0] || 'Erro desconhecido')

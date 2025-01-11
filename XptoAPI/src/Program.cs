@@ -7,6 +7,9 @@ using XptoAPI.src.Validators;
 using XptoAPI.src.Models;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +34,20 @@ builder.Services.AddSwaggerGen(c =>
     var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName));
 
+});
+
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+    options.ApiVersionReader = ApiVersionReader.Combine(
+        new UrlSegmentApiVersionReader(),
+        new HeaderApiVersionReader("X-Api-Version"));
+}).AddApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
 });
 
 // Configuração do CORS
