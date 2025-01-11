@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -14,6 +13,7 @@ export class MenuItemService {
   constructor(private http: HttpClient) { }
 
   getByTipoRefeicao(tipo: TipoRefeicao): Observable<MenuItem[]> {
+    console.log('Requesting items for tipo:', tipo); // Debug
     return this.http.get<MenuItem[]>(`${this.apiUrl}/tiporefeicao/${tipo}`);
   }
 }

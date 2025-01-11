@@ -16,12 +16,16 @@ namespace XptoAPI.src.Common.Validators
         /// <returns>Retorna true se o horário atual está dentro do horário permitido para a refeição, caso contrario false.</returns>
         public static bool IsHorarioPermitido(TipoRefeicao tipoRefeicao, DateTime dataHora)
         {
-            var hora = dataHora.TimeOfDay;
+            // Pega apenas o horário da data recebida, convertendo para Brasília
+            var brasiliaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+            var horaBrasilia = TimeZoneInfo.ConvertTimeFromUtc(dataHora.ToUniversalTime(), brasiliaTimeZone);
+            var horaAtual = horaBrasilia.TimeOfDay;
 
+            // Valida apenas o horário dentro das janelas permitidas
             return tipoRefeicao switch
             {
-                TipoRefeicao.CafedaManha => hora >= CafeDaManhaInicio && hora <= CafeDaManhaFim,
-                TipoRefeicao.Almoco => hora >= AlmocoInicio && hora <= AlmocoFim,
+                TipoRefeicao.CafedaManha => horaAtual >= CafeDaManhaInicio && horaAtual <= CafeDaManhaFim,
+                TipoRefeicao.Almoco => horaAtual >= AlmocoInicio && horaAtual <= AlmocoFim,
                 _ => false
             };
         }

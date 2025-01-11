@@ -32,15 +32,16 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName));
 
 });
+
+// Configuração do CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AngularPolicy",
-        builder =>
-        {
-            builder.WithOrigins("http://localhost:4200")
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
-        });
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
 
 var app = builder.Build();
@@ -51,7 +52,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors("AngularPolicy");
+app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

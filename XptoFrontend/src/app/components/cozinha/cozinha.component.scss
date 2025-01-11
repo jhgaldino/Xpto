@@ -27,8 +27,10 @@
         font-size: 0.875rem;
 
         &.recebido { background-color: #fff3cd; }
-        &.empreparacao { background-color: #cfe2ff; }
+        &.em-preparação { background-color: #cfe2ff; } // Ajustar o nome da classe
         &.pronto { background-color: #d1e7dd; }
+        &.entregue { background-color: #e2e3e5; }
+        &.cancelado { background-color: #f8d7da; }
       }
     }
 

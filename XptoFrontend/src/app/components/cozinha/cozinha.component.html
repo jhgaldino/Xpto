@@ -5,13 +5,13 @@
     <div *ngFor="let pedido of pedidos" class="pedido-card">
       <div class="pedido-header">
         <h3>Pedido #{{pedido.id}}</h3>
-        <span class="status" [class]="getStatusLabel(pedido.status).toLowerCase()">
+        <span class="status" [class]="getStatusLabel(pedido.status).toLowerCase().replace(' ', '-')">
           {{getStatusLabel(pedido.status)}}
         </span>
       </div>
 
       <div class="pedido-info">
-        <p>Horário: {{pedido.dataHoraPedido | date:'HH:mm'}}</p>
+        <p>Horário: {{formatDate(pedido.dataHoraPedido)}}</p>
         <p>Tipo: {{pedido.tipoRefeicao === 0 ? 'Café da Manhã' : 'Almoço'}}</p>
       </div>
 

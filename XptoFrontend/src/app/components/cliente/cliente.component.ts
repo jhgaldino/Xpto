@@ -5,6 +5,9 @@ import { PedidoService } from '../../services/pedido.service';
 import { MenuItemService } from '../../services/menu-item.service';
 import { MenuItem, TipoRefeicao, TipodeItemMenu } from '../../models/menu-item.model';
 import { Pedido, StatusPedido } from '../../models/pedido.model';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { TZDate } from '@date-fns/tz';
 
 @Component({
   selector: 'app-cliente',
@@ -17,11 +20,20 @@ export class ClienteComponent implements OnInit {
   menuItems: MenuItem[] = [];
   selectedItems: MenuItem[] = [];
   tipoRefeicao: TipoRefeicao = TipoRefeicao.CafedaManha;
+  currentTime: string = '';
 
   constructor(
     private menuItemService: MenuItemService,
     private pedidoService: PedidoService
-  ) {}
+  ) {
+    this.updateTime();
+    setInterval(() => this.updateTime(), 1000);
+  }
+
+  private updateTime(): void {
+    const now = new Date();
+    this.currentTime = format(now, 'dd/MM/yyyy HH:mm:ss', { locale: ptBR });
+  }
 
   ngOnInit(): void {
     this.loadMenuItems();
@@ -29,10 +41,16 @@ export class ClienteComponent implements OnInit {
 
   loadMenuItems(): void {
     this.menuItemService.getByTipoRefeicao(this.tipoRefeicao)
-      .subscribe({
-        next: (items) => this.menuItems = items,
-        error: (error) => console.error('Erro ao carregar itens:', error)
-      });
+        .subscribe({
+            next: (items) => {
+                console.log('Items received:', items);
+                this.menuItems = items;
+            },
+            error: (error) => {
+                console.error('Error loading items:', error);
+                this.menuItems = [];
+            }
+        });
   }
 
   changeTipoRefeicao(tipo: TipoRefeicao): void {
@@ -91,15 +109,8 @@ export class ClienteComponent implements OnInit {
       return;
     }
 
-    const agora = new Date();
-    const dataHoraPedido = new Date(
-      agora.getFullYear(),
-      agora.getMonth(),
-      agora.getDate(),
-      agora.getHours(),
-      agora.getMinutes(),
-      agora.getSeconds()
-    );
+    // Create date in Brasília timezone
+    const dataHoraPedido = new TZDate(new Date(), 'America/Sao_Paulo');
 
     const pedido: Pedido = {
       id: 0,

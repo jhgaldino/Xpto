@@ -13,9 +13,8 @@ namespace XptoAPI.src.Validators
 
             RuleFor(x => x.DataHoraPedido)
                 .NotEmpty()
-                .WithMessage("Data/hora do pedido é obrigatória")
-                .Must(data => data <= DateTime.Now)
-                .WithMessage("Data do pedido não pode ser futura");
+                .WithMessage("Data/hora do pedido é obrigatória");
+
 
             RuleFor(x => x.TipoRefeicao)
                 .IsInEnum()

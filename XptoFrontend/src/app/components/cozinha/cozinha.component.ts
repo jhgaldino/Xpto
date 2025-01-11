@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { PedidoService } from '../../services/pedido.service';
 import { Pedido, StatusPedido } from '../../models/pedido.model';
 import { TipodeItemMenu } from '../../models/menu-item.model';
+import { format, parseISO } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { TZDate } from '@date-fns/tz';
 
 @Component({
   selector: 'app-cozinha',
@@ -45,6 +48,27 @@ export class CozinhaComponent implements OnInit {
   }
 
   getStatusLabel(status: StatusPedido): string {
-    return StatusPedido[status];
+    switch (status) {
+      case StatusPedido.Recebido:
+        return "Recebido";
+      case StatusPedido.EmPreparacao:
+        return "Em Preparação";
+      case StatusPedido.Pronto:
+        return "Pronto";
+      case StatusPedido.Entregue:
+        return "Entregue";
+      case StatusPedido.Cancelado:
+        return "Cancelado";
+      default:
+        return "Desconhecido";
+    }
+  }
+
+  formatDate(date: string | Date): string {
+    const tzDate = typeof date === 'string' 
+      ? new TZDate(parseISO(date), 'America/Sao_Paulo')
+      : new TZDate(date, 'America/Sao_Paulo');
+    
+    return format(tzDate, 'HH:mm', { locale: ptBR });
   }
 }
