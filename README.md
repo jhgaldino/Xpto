@@ -63,7 +63,7 @@ Café da Manhã: 06:00 às 10:30
 
 Almoço: 11:30 às 14:30
 
-OBS : Ao fazer pedido na tela, o sistema está usando o horário real do sistema tanto no frontend quanto no backend. Caso esteja fora do horario dos pedidos, ajuste o horário do seu sistema.
+OBS : O sistema utiliza o horário real do sistema operacional, tanto no frontend quanto no backend, para determinar a disponibilidade de pedidos. Caso o horário do pedido esteja fora do intervalo permitido, ajuste temporariamente o horário do seu sistema para o período desejado, faça o pedido e, em seguida, retorne ao horário original.
 
 ## Documentação da API
 
