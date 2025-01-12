@@ -22,23 +22,21 @@ namespace XptoAPI.src.Services
 
         public async Task<IEnumerable<Pedido>> GetPedidosCozinhaAsync()
         {
-            var pedidosNaoFinalizados = await _context.Pedidos!
+            var pedidosAtivos = await _context.Pedidos!
                 .Where(p => p.Status == StatusPedido.Recebido ||
-                            p.Status == StatusPedido.EmPreparacao ||
-                            p.Status == StatusPedido.Pronto)
+                            p.Status == StatusPedido.EmPreparacao) // Remove pedido pronto somente da exibicao, nao do banco
                 .OrderBy(p => p.DataHoraPedido)
                 .Include(p => p.Itens)
                 .ToListAsync();
 
-            // Ordena os itens de cada pedido conforme a regra de negócio
-            foreach (var pedido in pedidosNaoFinalizados)
+            foreach (var pedido in pedidosAtivos)
             {
                 pedido.Itens = pedido.Itens
                     .OrderBy(item => GetOrdemTipoItem(item.Tipo))
                     .ToList();
             }
 
-            return pedidosNaoFinalizados;
+            return pedidosAtivos;
         }
 
         private static int GetOrdemTipoItem(TipodeItemMenu tipo)

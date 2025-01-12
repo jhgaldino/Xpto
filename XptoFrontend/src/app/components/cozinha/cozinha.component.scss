@@ -4,19 +4,22 @@
   margin: 0 auto;
 
   .pedidos-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
     margin-top: 1rem;
   }
 
   .pedido-card {
-    width: 100%;
+    flex: 1 1 300px; // Flex-grow, flex-shrink, flex-basis
+    min-width: 300px;
+    max-width: calc(33.333% - 1rem); // 3 cards por linha com gap
     padding: 1rem;
     border: 1px solid #ddd;
     border-radius: 4px;
     background-color: white;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 
     &:hover {
@@ -80,6 +83,18 @@
           background-color: #0056b3;
         }
       }
+    }
+  }
+
+  @media (max-width: 992px) {
+    .pedido-card {
+      max-width: calc(50% - 1rem); // 2 cards por linha
+    }
+  }
+
+  @media (max-width: 768px) {
+    .pedido-card {
+      max-width: 100%; // 1 card por linha
     }
   }
 

@@ -3,3 +3,4 @@ obj/
 .vs/
 bin/
 editorconfig/
+XptoAPI/Migrations/

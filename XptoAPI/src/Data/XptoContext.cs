@@ -24,7 +24,7 @@ namespace XptoAPI.src.Data
                     Nome = "Café",
                     Tipo = TipodeItemMenu.Bebida,
                     TipoRefeicao = TipoRefeicao.CafedaManha,
-                    ImagemUrl = "/static/images/cafe.jpg"
+                    ImagemUrl = "/static/images/coffee.jpg"
                 },
                 new MenuItem
                 {
