@@ -80,6 +80,7 @@ src/Controllers/: Controladores da API
 src/Models/: Modelos de dados
 
 src/Services/: Lógica de negócios
+
 src/Validators/: Validações
 
 src/Data/: Contexto do banco de dados
