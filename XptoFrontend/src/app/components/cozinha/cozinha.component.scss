@@ -1,5 +1,7 @@
 .cozinha-container {
   padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
 
   .pedidos-grid {
     display: grid;
@@ -9,24 +11,18 @@
   }
 
   .pedido-card {
-   .pedido-card {
     width: 100%;
     padding: 1rem;
     border: 1px solid #ddd;
     border-radius: 4px;
     background-color: white;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 
-    @media (max-width: 600px) {
-      padding: 0.75rem;
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-
-    @media (max-width: 600px) {
-    h2 { font-size: 1.5rem; }
-    h3 { font-size: 1.2rem; }
-    .status { font-size: 0.8rem; }
-    button { padding: 0.4rem 0.8rem; }
-  }
 
     .pedido-header {
       display: flex;
@@ -34,30 +30,42 @@
       align-items: center;
       margin-bottom: 1rem;
 
+      h3 {
+        margin: 0;
+        font-size: 1.2rem;
+      }
+
       .status {
         padding: 0.25rem 0.5rem;
         border-radius: 4px;
         font-size: 0.875rem;
 
         &.recebido { background-color: #fff3cd; }
-        &.em-preparação { background-color: #cfe2ff; } // Ajustar o nome da classe
+        &.em-preparação { background-color: #cfe2ff; }
         &.pronto { background-color: #d1e7dd; }
-        &.entregue { background-color: #e2e3e5; }
-        &.cancelado { background-color: #f8d7da; }
+      }
+    }
+
+    .pedido-info {
+      margin: 1rem 0;
+      p {
+        margin: 0.5rem 0;
       }
     }
 
     .pedido-items {
       margin-top: 1rem;
-
       ul {
         list-style: none;
         padding-left: 0;
+        margin: 0;
       }
     }
 
     .pedido-actions {
       margin-top: 1rem;
+      display: flex;
+      gap: 0.5rem;
       
       button {
         padding: 0.5rem 1rem;
@@ -66,6 +74,7 @@
         cursor: pointer;
         background-color: #007bff;
         color: white;
+        transition: background-color 0.2s ease;
 
         &:hover {
           background-color: #0056b3;
@@ -73,5 +82,17 @@
       }
     }
   }
-}
+
+  @media (max-width: 600px) {
+    padding: 0.5rem;
+    
+    .pedido-card {
+      padding: 0.75rem;
+    }
+
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.2rem; }
+    .status { font-size: 0.8rem; }
+    button { padding: 0.4rem 0.8rem; }
+  }
 }
