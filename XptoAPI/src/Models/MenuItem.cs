@@ -6,6 +6,7 @@
         public required string Nome { get; set; }
         public TipodeItemMenu Tipo { get; set; }
         public TipoRefeicao TipoRefeicao { get; set; }
+        public string ImagemUrl { get; set; }
     }
 
     public enum TipodeItemMenu

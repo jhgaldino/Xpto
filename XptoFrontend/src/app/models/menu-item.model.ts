@@ -16,5 +16,6 @@ export interface MenuItem {
   nome: string;
   tipo: TipodeItemMenu;
   tipoRefeicao: TipoRefeicao;
+  imagemUrl: string;
 }
 

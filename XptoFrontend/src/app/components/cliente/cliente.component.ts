@@ -8,6 +8,7 @@ import { Pedido, StatusPedido } from '../../models/pedido.model';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { TZDate } from '@date-fns/tz';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-cliente',
@@ -21,7 +22,8 @@ export class ClienteComponent implements OnInit {
   selectedItems: MenuItem[] = [];
   tipoRefeicao: TipoRefeicao = TipoRefeicao.CafedaManha;
   currentTime: string = '';
-
+  apiUrl = environment.apiUrl;
+  
   constructor(
     private menuItemService: MenuItemService,
     private pedidoService: PedidoService

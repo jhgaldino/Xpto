@@ -16,8 +16,14 @@
            class="menu-item"
            [class.selected]="selectedItems.includes(item)"
            (click)="toggleItemSelection(item)">
-        <h3>{{item.nome}}</h3>
-        <p>{{getTipoLabel(item.tipo)}}</p>
+        <img  
+             [src]="apiUrl + item.imagemUrl"
+             class="item-image">
+        <div class="item-content">
+        
+          <p>{{getTipoLabel(item.tipo)}}</p>
+          <h3>{{item.nome}}</h3>
+        </div>
       </div>
     </div>
   </div>

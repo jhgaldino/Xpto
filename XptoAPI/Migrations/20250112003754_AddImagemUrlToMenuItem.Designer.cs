@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using XptoAPI.src.Data;
 
@@ -10,9 +11,11 @@ using XptoAPI.src.Data;
 namespace XptoAPI.Migrations
 {
     [DbContext(typeof(XptoContext))]
-    partial class XptoContextModelSnapshot : ModelSnapshot
+    [Migration("20250112003754_AddImagemUrlToMenuItem")]
+    partial class AddImagemUrlToMenuItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
@@ -68,7 +71,7 @@ namespace XptoAPI.Migrations
                         new
                         {
                             Id = 2,
-                            ImagemUrl = "/static/images/soda.jpg",
+                            ImagemUrl = "",
                             Nome = "Refrigerante",
                             Tipo = 0,
                             TipoRefeicao = 1
@@ -76,7 +79,7 @@ namespace XptoAPI.Migrations
                         new
                         {
                             Id = 3,
-                            ImagemUrl = "/static/images/toast.jpg",
+                            ImagemUrl = "",
                             Nome = "Torrada",
                             Tipo = 1,
                             TipoRefeicao = 0
@@ -84,7 +87,7 @@ namespace XptoAPI.Migrations
                         new
                         {
                             Id = 4,
-                            ImagemUrl = "/static/images/salad.jpg",
+                            ImagemUrl = "",
                             Nome = "Salada",
                             Tipo = 1,
                             TipoRefeicao = 1
@@ -92,7 +95,7 @@ namespace XptoAPI.Migrations
                         new
                         {
                             Id = 5,
-                            ImagemUrl = "/static/images/bacon.jpg",
+                            ImagemUrl = "",
                             Nome = "Bacon",
                             Tipo = 2,
                             TipoRefeicao = 0
@@ -100,7 +103,7 @@ namespace XptoAPI.Migrations
                         new
                         {
                             Id = 6,
-                            ImagemUrl = "/static/images/steak.jpg",
+                            ImagemUrl = "",
                             Nome = "Bife",
                             Tipo = 2,
                             TipoRefeicao = 1
@@ -108,7 +111,7 @@ namespace XptoAPI.Migrations
                         new
                         {
                             Id = 7,
-                            ImagemUrl = "/static/images/cake.jpg",
+                            ImagemUrl = "",
                             Nome = "Bolo",
                             Tipo = 3,
                             TipoRefeicao = 1

@@ -18,13 +18,62 @@ namespace XptoAPI.src.Data
 
             // Configurações adicionais para as entidades
             modelBuilder.Entity<MenuItem>().HasData(
-                new MenuItem { Id = 1, Nome = "Café", Tipo = TipodeItemMenu.Bebida, TipoRefeicao = TipoRefeicao.CafedaManha },
-                new MenuItem { Id = 2, Nome = "Refrigerante", Tipo = TipodeItemMenu.Bebida, TipoRefeicao = TipoRefeicao.Almoco },
-                new MenuItem { Id = 3, Nome = "Torrada", Tipo = TipodeItemMenu.Acompanhamento, TipoRefeicao = TipoRefeicao.CafedaManha },
-                new MenuItem { Id = 4, Nome = "Salada", Tipo = TipodeItemMenu.Acompanhamento, TipoRefeicao = TipoRefeicao.Almoco },
-                new MenuItem { Id = 5, Nome = "Bacon", Tipo = TipodeItemMenu.PratoPrincipal, TipoRefeicao = TipoRefeicao.CafedaManha },
-                new MenuItem { Id = 6, Nome = "Bife", Tipo = TipodeItemMenu.PratoPrincipal, TipoRefeicao = TipoRefeicao.Almoco },
-                new MenuItem { Id = 7, Nome = "Bolo", Tipo = TipodeItemMenu.Sobremesa, TipoRefeicao = TipoRefeicao.Almoco }
+                new MenuItem
+                {
+                    Id = 1,
+                    Nome = "Café",
+                    Tipo = TipodeItemMenu.Bebida,
+                    TipoRefeicao = TipoRefeicao.CafedaManha,
+                    ImagemUrl = "/static/images/cafe.jpg"
+                },
+                new MenuItem
+                {
+                    Id = 2,
+                    Nome = "Refrigerante",
+                    Tipo = TipodeItemMenu.Bebida,
+                    TipoRefeicao = TipoRefeicao.Almoco,
+                    ImagemUrl = "/static/images/soda.jpg"
+                },
+                new MenuItem
+                {
+                    Id = 3,
+                    Nome = "Torrada",
+                    Tipo = TipodeItemMenu.Acompanhamento,
+                    TipoRefeicao = TipoRefeicao.CafedaManha,
+                    ImagemUrl = "/static/images/toast.jpg"
+                },
+                new MenuItem
+                {
+                    Id = 4,
+                    Nome = "Salada",
+                    Tipo = TipodeItemMenu.Acompanhamento,
+                    TipoRefeicao = TipoRefeicao.Almoco,
+                    ImagemUrl = "/static/images/salad.jpg"
+                },
+                new MenuItem
+                {
+                    Id = 5,
+                    Nome = "Bacon",
+                    Tipo = TipodeItemMenu.PratoPrincipal,
+                    TipoRefeicao = TipoRefeicao.CafedaManha,
+                    ImagemUrl = "/static/images/bacon.jpg"
+                },
+                new MenuItem
+                {
+                    Id = 6,
+                    Nome = "Bife",
+                    Tipo = TipodeItemMenu.PratoPrincipal,
+                    TipoRefeicao = TipoRefeicao.Almoco,
+                    ImagemUrl = "/static/images/steak.jpg"
+                },
+                new MenuItem
+                {
+                    Id = 7,
+                    Nome = "Bolo",
+                    Tipo = TipodeItemMenu.Sobremesa,
+                    TipoRefeicao = TipoRefeicao.Almoco,
+                    ImagemUrl = "/static/images/cake.jpg"
+                }
             );
 
             modelBuilder.Entity<Pedido>()

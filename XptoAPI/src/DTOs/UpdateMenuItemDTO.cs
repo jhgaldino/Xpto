@@ -7,5 +7,6 @@ namespace XptoAPI.src.DTOs
         public string Nome { get; set; } = string.Empty;
         public TipodeItemMenu Tipo { get; set; }
         public TipoRefeicao TipoRefeicao { get; set; }
+        public string ImagemUrl { get; set; } = string.Empty;
     }
 }
