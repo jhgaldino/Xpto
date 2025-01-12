@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using XptoAPI.src.Data;
 
@@ -10,9 +11,11 @@ using XptoAPI.src.Data;
 namespace XptoAPI.Migrations
 {
     [DbContext(typeof(XptoContext))]
-    partial class XptoContextModelSnapshot : ModelSnapshot
+    [Migration("20250112125235_AddImagesUrlToMenuItems3")]
+    partial class AddImagesUrlToMenuItems3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
