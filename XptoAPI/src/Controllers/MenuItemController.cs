@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using XptoAPI.src.DTOs;
 using XptoAPI.src.Interfaces;
 using XptoAPI.src.Models;
 using XptoAPI.src.Services;
@@ -24,16 +25,23 @@ namespace XptoAPI.src.Controllers
         }
 
         /// <summary>
-        /// Retorna a lista completa de itens do menu.
+        /// Retorna uma lista paginada de itens do menu.
         /// </summary>
-        /// <remarks>Exemplo de requisição: GET /api/MenuItem</remarks>
-        /// <response code="200">Retorna a lista de itens do menu</response>
-        /// <response code="500">Erro interno</response>
+        /// <param name="pageNumber">Número da página (default: 1)</param>
+        /// <param name="pageSize">Quantidade de itens por página (default: 10)</param>
+        /// <returns>Lista paginada de itens do menu</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MenuItem>>> GetAll()
+        public async Task<ActionResult<PaginatedList<MenuItem>>> GetPaginated(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
         {
-            var items = await _menuItemService.GetAllAsync();
-            return Ok(items);
+            if (pageNumber < 1 || pageSize < 1)
+            {
+                return BadRequest("Page number and page size must be positive numbers.");
+            }
+
+            var pagedResult = await _menuItemService.GetPaginatedAsync(pageNumber, pageSize);
+            return Ok(pagedResult);
         }
 
         /// <summary>

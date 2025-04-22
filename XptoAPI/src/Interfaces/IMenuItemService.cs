@@ -1,4 +1,5 @@
 using XptoAPI.src.Models;
+using XptoAPI.src.DTOs;
 
 namespace XptoAPI.src.Interfaces
 {
@@ -10,5 +11,6 @@ namespace XptoAPI.src.Interfaces
         Task<MenuItem> CreateAsync(MenuItem menuItem);
         Task UpdateAsync(MenuItem menuItem);
         Task DeleteAsync(int id);
+        Task<PaginatedList<MenuItem>> GetPaginatedAsync(int pageNumber, int pageSize);
     }
 }

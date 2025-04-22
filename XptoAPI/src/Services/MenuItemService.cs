@@ -3,6 +3,7 @@ using XptoAPI.src.Common.Validators;
 using XptoAPI.src.Data;
 using XptoAPI.src.Interfaces;
 using XptoAPI.src.Models;
+using XptoAPI.src.DTOs;
 
 namespace XptoAPI.src.Services
 {
@@ -65,5 +66,24 @@ namespace XptoAPI.src.Services
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<PaginatedList<MenuItem>> GetPaginatedAsync(int pageNumber, int pageSize)
+        {
+            var totalCount = await _context.MenuItems!.CountAsync();
+            var items = await _context.MenuItems!
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginatedList<MenuItem>
+            {
+                Items = items,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+            };
+        }
+
     }
 }

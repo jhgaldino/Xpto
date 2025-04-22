@@ -1,14 +1,19 @@
+using NodaTime;
+using NodaTime.TimeZones;
 using XptoAPI.src.Models;
 
 namespace XptoAPI.src.Common.Validators
 {
     public static class DataHoraValidator
     {
-        // Horários ajustados para UTC (Brasília + 3h)
-        private static readonly TimeSpan CafeDaManhaInicio = new(9, 0, 0);  // 06:00 BRT = 09:00 UTC
-        private static readonly TimeSpan CafeDaManhaFim = new(13, 30, 0);   // 10:30 BRT = 13:30 UTC
-        private static readonly TimeSpan AlmocoInicio = new(14, 30, 0);     // 11:30 BRT = 14:30 UTC
-        private static readonly TimeSpan AlmocoFim = new(17, 30, 0);        // 14:30 BRT = 17:30 UTC
+        // Definindo os horários em Brasília
+        private static readonly LocalTime CafeDaManhaInicio = new(6, 0);  // 06:00 BRT
+        private static readonly LocalTime CafeDaManhaFim = new(10, 30);   // 10:30 BRT
+        private static readonly LocalTime AlmocoInicio = new(11, 30);     // 11:30 BRT
+        private static readonly LocalTime AlmocoFim = new(14, 30);        // 14:30 BRT
+
+        private static readonly DateTimeZone BrasiliaTimeZone =
+            DateTimeZoneProviders.Tzdb["America/Sao_Paulo"];
 
         /// <summary>
         /// Verifica se o horário atual está dentro do horário permitido para a refeição.
@@ -17,14 +22,17 @@ namespace XptoAPI.src.Common.Validators
         /// <returns>Retorna true se o horário atual está dentro do horário permitido para a refeição, caso contrario false.</returns>
         public static bool IsHorarioPermitido(TipoRefeicao tipoRefeicao, DateTime dataHora)
         {
-            // Usa o horário UTC diretamente
-            var horaAtual = dataHora.ToUniversalTime().TimeOfDay;
+            // Converte DateTime para Instant do NodaTime
+            var instant = Instant.FromDateTimeUtc(dataHora.ToUniversalTime());
 
-            // Valida contra os horários UTC
+            // Converte para horário de Brasília
+            var zonedDateTime = instant.InZone(BrasiliaTimeZone);
+            var localTime = zonedDateTime.TimeOfDay;
+
             return tipoRefeicao switch
             {
-                TipoRefeicao.CafedaManha => horaAtual >= CafeDaManhaInicio && horaAtual <= CafeDaManhaFim,
-                TipoRefeicao.Almoco => horaAtual >= AlmocoInicio && horaAtual <= AlmocoFim,
+                TipoRefeicao.CafedaManha => localTime >= CafeDaManhaInicio && localTime <= CafeDaManhaFim,
+                TipoRefeicao.Almoco => localTime >= AlmocoInicio && localTime <= AlmocoFim,
                 _ => false
             };
         }
