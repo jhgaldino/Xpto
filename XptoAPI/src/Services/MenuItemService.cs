@@ -11,7 +11,6 @@ namespace XptoAPI.src.Services
     {
         private readonly XptoContext _context;
 
-
         public MenuItemService(XptoContext context)
         {
             _context = context;
@@ -36,9 +35,10 @@ namespace XptoAPI.src.Services
 
         public async Task<MenuItem> CreateAsync(MenuItem menuItem)
         {
-            if (!DataHoraValidator.IsHorarioPermitido(menuItem.TipoRefeicao, DateTime.Now))
+            var (isValido, mensagem) = DataHoraValidator.ValidarHorario(menuItem.TipoRefeicao, DateTime.Now);
+            if (!isValido)
             {
-                throw new InvalidOperationException($"Não é possível criar itens do tipo {menuItem.TipoRefeicao} fora do horário permitido.");
+                throw new InvalidOperationException($"Não é possível criar itens do tipo {menuItem.TipoRefeicao}: {mensagem}");
             }
 
             _context.MenuItems!.Add(menuItem);
@@ -48,9 +48,10 @@ namespace XptoAPI.src.Services
 
         public async Task UpdateAsync(MenuItem menuItem)
         {
-            if (!DataHoraValidator.IsHorarioPermitido(menuItem.TipoRefeicao, DateTime.Now))
+            var (isValido, mensagem) = DataHoraValidator.ValidarHorario(menuItem.TipoRefeicao, DateTime.Now);
+            if (!isValido)
             {
-                throw new InvalidOperationException($"Não é possível atualizar itens do tipo {menuItem.TipoRefeicao} fora do horário permitido.");
+                throw new InvalidOperationException($"Não é possível atualizar itens do tipo {menuItem.TipoRefeicao}: {mensagem}");
             }
 
             _context.Entry(menuItem).State = EntityState.Modified;
@@ -84,6 +85,5 @@ namespace XptoAPI.src.Services
                 TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
             };
         }
-
     }
 }

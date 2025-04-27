@@ -61,9 +61,18 @@ namespace XptoAPI.src.Services
                     string.Join(", ", validationResult.Errors.Select(x => x.ErrorMessage)));
             }
 
-            if (!DataHoraValidator.IsHorarioPermitido(pedido.TipoRefeicao, pedido.DataHoraPedido))
+            // Alteração: usar o novo método ValidarHorario
+            var (isHorarioValido, mensagem) = DataHoraValidator.ValidarHorario(pedido.TipoRefeicao, pedido.DataHoraPedido);
+            if (!isHorarioValido)
             {
-                return Errors.Pedido.HorarioNaoPermitido;
+                return Error.Validation("Pedido.HorarioNaoPermitido", mensagem);
+            }
+
+            // Validar  o horário de funcionamento
+            var (isFuncionamentoValido, mensagemFuncionamento) = DataHoraValidator.ValidarHorarioFuncionamento(pedido.DataHoraPedido);
+            if (!isFuncionamentoValido)
+            {
+                return Error.Validation("Pedido.HorarioNaoPermitido", mensagemFuncionamento);
             }
 
             // Buscar os itens existentes do banco
