@@ -5,11 +5,15 @@ using XptoAPI.src.Services;
 using FluentValidation;
 using XptoAPI.src.Validators;
 using XptoAPI.src.Models;
+using XptoAPI.src.Filters;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Microsoft.Extensions.FileProviders;
+using System.Threading.RateLimiting;
+using XptoAPI.src.Filters;
+using XptoAPI.src.Middleware;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,17 +54,43 @@ builder.Services.AddApiVersioning(options =>
     options.GroupNameFormat = "'v'VVV";
     options.SubstituteApiVersionInUrl = true;
 });
+builder.Services.AddRateLimiter(options =>
+{
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "localhost",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                AutoReplenishment = true,
+                PermitLimit = 100,
+                Window = TimeSpan.FromMinutes(1)
+            }));
+});
 
 // Configuração do CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:4200", "https://localhost:4200") // Adicione a origem HTTPS
+        policy.WithOrigins("http://localhost:4200")
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .WithMethods("GET", "POST", "PUT", "DELETE")
+              .WithExposedHeaders("X-Pagination");
     });
 });
+
+builder.Services.AddHsts(options =>
+{
+    options.MaxAge = TimeSpan.FromDays(365);
+    options.IncludeSubDomains = true;
+    options.Preload = true;
+});
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidateModelStateFilter>();
+});
+
 
 var app = builder.Build();
 
@@ -74,6 +104,19 @@ app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+app.UseRateLimiter();
+app.UseHttpsRedirection();
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+    context.Response.Headers.Append("X-Frame-Options", "DENY");
+    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
+    context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
+    context.Response.Headers.Append("Content-Security-Policy",
+        "default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline';");
+    await next();
+});
+app.UseMiddleware<RequestLoggingMiddleware>();
 var staticFilesPath = Path.Combine(builder.Environment.ContentRootPath, "wwwroot");
 if (!Directory.Exists(staticFilesPath))
 {
